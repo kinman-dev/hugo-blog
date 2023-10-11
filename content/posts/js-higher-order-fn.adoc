@@ -1,0 +1,61 @@
+---
+title: "Javascript: Higher-order Function"
+date: 2023-10-03
+draft: false
+categories:
+  - Javascript
+tags:
+  - javascript
+  - higher-order function
+---
+:source-highlighter: rouge
+:rouge-css: style
+:rouge-style: pastie
+:toc:
+// Set toclevels to be at least your hugo [markup.tableOfContents.endLevel] configuration key
+:toclevels: 4
+
+== Create functions within functions
+[source,js]
+----
+function fun1(a) {
+  function fun2(b) {
+    return a + b;
+  }
+  return fun2;
+}
+
+console.log(fun1(1)(2)); //3
+----
+
+== Pass functions to functions
+[source,js]
+----
+const normalFn = function () {
+    console.log("@normalFn");
+};
+                
+function higherFn(arg) {
+    console.log("@higherFn");
+    arg();
+}
+                
+//higherFn takes normalFn as an argument
+higherFn(normalFn);
+----
+
+== Return functions from functions
+[source,js]
+----
+function higherFnWithReturn() {
+    return normalFn;
+}
+                
+//return a function 
+console.log(higherFnWithReturn());
+//execute the return function with extra() 
+higherFnWithReturn()();
+----
+
+== P.S.
+Callback is a form of higher-order function which we often see.

@@ -1,0 +1,38 @@
+---
+title: "Javascript: Lexical Scope"
+date: 2023-10-05
+draft: false
+categories:
+  - Javascript
+tags:
+  - javascript
+  - lexical scope
+---
+:source-highlighter: rouge
+:rouge-css: style
+:rouge-style: pastie
+:toc:
+// Set toclevels to be at least your hugo [markup.tableOfContents.endLevel] configuration key
+:toclevels: 4
+
+== Definition
+Lexical scope/static scope means the scope refers to where it is defined.
+
+[source,js]
+----
+// Define a variable in the global scope, so lexical scope = global
+const globalFoo = "foo";
+function chain1() {
+  function chain2() {
+    //inner scope can asccess the outer scope though the scope chain
+    //chain2 -> chain1 -> global
+    return globalFoo;
+  }
+  return chain2();
+}
+console.log(chain1());//foo
+----
+
+== P.S.
+If the same object got defined, the closer scope takes the higher precedence.
+In other words, the global scope is always the last scope.

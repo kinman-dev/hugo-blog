@@ -1,0 +1,63 @@
+---
+title: "Javascript: Hoisting"
+date: 2023-10-04
+draft: false
+categories:
+  - Javascript
+tags:
+  - javascript
+  - hoisting
+---
+:source-highlighter: rouge
+:rouge-css: style
+:rouge-style: pastie
+:toc:
+// Set toclevels to be at least your hugo [markup.tableOfContents.endLevel] configuration key
+:toclevels: 4
+
+== Definiton
+JavaScript engines use the JIT(just in time) compiler to execute the code.
+Variable and function declaration can be used before it has been initialized,
+think of it as the copmpiler moves the declaration to the top of the code.
+
+[source,js]
+----
+console.log(dummy);
+var dummy = 1; //won't throw error, it prints "undefined"
+----
+
+we can think of it as below:
+[source,js]
+----
+var dummy;
+console.log(dummy);
+dummy = 1;
+----
+
+However, let or const will throw ReferenceError
+[source,js]
+----
+console.log(tommy);//throw ReferenceError
+let tommy = 2;
+----
+
+function declaration vs function expression
+[source,js]
+----
+foo(); //function declaration, it runs
+try {
+  bar();//function expression, throw TypeError
+} catch (error) {
+  console.log(error);
+}
+    
+function foo() {
+  console.log(1);
+}
+            
+var bar = function () {
+  console.log(2);
+----
+
+== P.S.
+Use let, const and function expression to avoid hoisting as it may cause confusing
