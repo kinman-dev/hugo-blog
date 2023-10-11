@@ -2,7 +2,7 @@
 # languageCode = "en-us"
 # title = "My New Hugo Site"
 
-baseURL = "http://example.org/"
+baseURL = "https://blog.kinman-dev.com/"
 
 # Change the default theme to be use when building the site with Hugo
 theme = "LoveIt"
