@@ -1,0 +1,97 @@
+---
+title: "OpenTofu with GCP"
+date: 2023-10-17
+draft: false
+categories:
+  - OpenTofu
+tags:
+  - opentofu
+  - gcp
+  - infrastructure as code
+  - terraform 
+---
+:source-highlighter: rouge
+:rouge-css: style
+:rouge-style: pastie
+:toc:
+// Set toclevels to be at least your hugo [markup.tableOfContents.endLevel] configuration key
+:toclevels: 4
+
+== Introduction
+The Linux Foundation has launched a new open sourse project called OpenTofu as an alternative to Terraform after Terraform changed its license type. Here are the steps to install OpenTofu and an example of setting it up with GCP. 
+
+
+== Install opentofu with snap on Linux
+
+1. install opentofu with snap
++ 
+[source,bash]
+----
+$ sudo apt update
+$ sudo apt install snapd
+$ sudo snap install core
+$ export PATH="$PATH:/snap/bin"
+
+$ sudo snap install opentofu --classic
+$ tofu version
+
+# output
+OpenTofu v1.6.0-alpha2
+on linux_arm64
+----
+
+
+2. or if you want the build it from the source, then follow below link
+    - https://youtu.be/a-lGAp9vWaQ?si=KlzsXhGt4XGStU-H
+
+
+
+== Setup GCP and Enable API
+1. unfortunately, there are some GUI steps are needed to set up the GCP account, obtain the service account credential key json file, so it is not 100% infrastructure as code. The detailed steps can be refer to https://github.com/rishabkumar7/freecodecamp-terraform-with-gcp
+    - sign up GCP, will need billing infomation
+    - get and download the service account credential key json file, will be placed in the project directory
+    - enble cloud DNS
+    - enable cloud CDN
+    - enable cloud load balancing
+    - enable cloud storage
+
+== Writing the .tf file for the infrastructure
+1. use git to clone the source
++ 
+[source,bash]
+----
+$ git clone https://github.com/kinman-dev/Example-OpenTofu-with-GCP.git
+----
+
+== Apply to GCP
++ 
+[source,bash]
+----
+$ tofu init -upgrade # initialize the code as opentofu project
+$ tofu plan          # create an execution plan and preview the changes 
+$ tofu apply         # execute the actions proposed in a plan
+----
+
+
+== Bind GCP DNS IP to domain
+1. find the IP address of GCP DNS
++
+image::/post_img/GCP_DNS_IP.png[]
+
+2. Apply the IP to DNS zone setting on the domain provider site 
++
+image::/post_img/Domain_DNS.png[]
+
+== Go to the website
+. visit https://website.test.{your_domain}/index.html 
++
+image::/post_img/tofu-gcp-website.png[]
+
+
+== Clean the GCP resource
+. remember to clean up the resource once this project is done. Otherwise, google may charge you money   
++ 
+[source,bash]
+----
+$ tofu destroy       # terminate the resources of the project
+----
