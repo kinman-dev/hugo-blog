@@ -1,0 +1,56 @@
+---
+title: "Java: Always Pass by Value "
+date: 2023-10-24
+draft: false
+categories:
+  - Java
+tags:
+  - java
+  - immutability
+---
+:source-highlighter: rouge
+:rouge-css: style
+:rouge-style: pastie
+:toc:
+// Set toclevels to be at least your hugo [markup.tableOfContents.endLevel] configuration key
+:toclevels: 4
+
+== Background
+
+When I heard that Java is always passed by value, I took the C/C++ way of thinking that changing the value inside a function would not take effective.
+Actually, it is not as simple as that.
+For Java, if it is a reference type object(not primitive data type), it would pass the copy of the address that the object refers to,
+and if this object is mutable, changing the value inside a function can take effective. 
+[source,java]
+----
+public static void main(String[] args) {
+    String immutableStingExample = "abc";
+    StringBuilder mutableStingExample = new StringBuilder("abc");
+    System.out.println("Before function is called: ");
+    System.out.println("immutableStingExample: "+ immutableStingExample);
+    System.out.println("mutableStingExample: "+ mutableStingExample);
+    doSomething(immutableStingExample, mutableStingExample);
+    System.out.println("After function is called: ");
+    System.out.println("immutableStingExample: "+ immutableStingExample);
+    System.out.println("mutableStingExample: "+ mutableStingExample);
+}
+static void doSomething(String immutableStingExample, StringBuilder mutableStingExample){
+    immutableStingExample = "xyz";
+    mutableStingExample = mutableStingExample.
+        replace(0, mutableStingExample.length(), "xyz");
+}
+----
+
+Output:
+----
+Before function is called: 
+immutableStingExample: abc
+mutableStingExample: abc
+After function is called: 
+immutableStingExample: abc
+mutableStingExample: xyz
+----
+
+
+== P.S.
+I think that is one of the reasons why understanding the concept of immutability in Java is so important. 
