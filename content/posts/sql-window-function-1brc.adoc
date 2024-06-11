@@ -1,0 +1,97 @@
+---
+title: "Using SQL window function with JOOQ and Springboot to fetch the result for The One Billion Row Challenge"
+date: 2024-06-10
+draft: false
+categories:
+  - SQL
+  - Window Function
+  - JOOQ
+  - Springboot
+tags:
+  - SQL
+  - Window Function
+  - JOOQ
+  - Springboot
+---
+:source-highlighter: rouge
+:rouge-css: style
+:rouge-style: pastie
+:toc:
+// Set toclevels to be at least your hugo [markup.tableOfContents.endLevel] configuration key
+:toclevels: 4
+
+== About
+Refer to https://github.com/gunnarmorling/1brc[The One Billion Row Challenge],
+although the purpose of the One Billion Row Challenge is to see how fast pure Java can achieve,
+in day to day work, we usually deal with this kind of data transformation using SQL with a database.
+Let me take it as an execise for using SQL window function. 
+
+
+[source,sql]
+----
+-- using window function to get the min for one city
+SELECT
+	STATION_NAME,
+	MEASUREMENT,
+	ROUND(
+		MIN(MEASUREMENT::NUMERIC) OVER (
+			PARTITION BY
+				STATION_NAME
+		),
+		1
+	) AS MIN_MEASUREMENT
+FROM
+	WEATHER_STATIONS
+WHERE
+	STATION_NAME = 'Santa Cruz';
+----
+
+
+[source,sql]
+----
+-- using window function to get the min, mean, max over paititon by the same city
+SELECT DISTINCT
+	STATION_NAME,
+	MIN_MEASUREMENT,
+	MEAN_MEASUREMENT,
+	MAX_MEASUREMENT
+FROM
+	(
+		SELECT
+			STATION_NAME,
+			ROUND(
+				MIN(MEASUREMENT::NUMERIC) OVER (
+					PARTITION BY
+						STATION_NAME
+				),
+				1
+			) AS MIN_MEASUREMENT,
+			ROUND(
+				AVG(MEASUREMENT::NUMERIC) OVER (
+					PARTITION BY
+						STATION_NAME
+				),
+				1
+			) AS MEAN_MEASUREMENT,
+			ROUND(
+				MAX(MEASUREMENT::NUMERIC) OVER (
+					PARTITION BY
+						STATION_NAME
+				),
+				1
+			) AS MAX_MEASUREMENT
+		FROM
+			WEATHER_STATIONS
+	) AS SUBQUERY
+ORDER BY
+	1 ASC;
+----
+
+
+
+
+== P.S.
+Before sql having window function, we had to select a lot of subqueries and then join them.
+Now we can do thing with much more simpler statement. I also implemented a springboot demo 
+https://github.com/kinman-dev/1brc-using-sql[project]
+using JOOQ to do simluate the window function.
