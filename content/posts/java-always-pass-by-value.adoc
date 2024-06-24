@@ -18,9 +18,16 @@ tags:
 == Background
 
 When I heard that Java is always passed by value, I took the C/C++ way of thinking that changing the value inside a function would not take effective.
-Actually, it is not as simple as that.
-For Java, if it is a reference type object(not primitive data type), it would pass the copy of the address that the object refers to,
-and if this object is mutable, changing the value inside a function can take effective. 
+However, it is not as simple as that.
+For Java, object is passed by the copied value of the reference(memory address), which means changing the object's attribute value inside a function would take effective since they points to the same memory address.
+But if it is an immutable object like String, changing its value would create a new String object with different reference(memory address).
+Therefore, the value inside a function would not take effective.
+
+.Mental shortcuts:
+. Primitives -> NOT effective
+. Mutable Object -> effective
+. Immutable Object ->  NOT effective
+
 [source,java]
 ----
 public static void main(String[] args) {
